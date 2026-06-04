@@ -786,7 +786,10 @@ impl WindowHandle {
     }
 
     pub(crate) fn render_frame(&mut self) {
+        #[cfg(not(target_arch = "wasm32"))]
         let renderer_ready = matches!(self.paint_state, PaintState::Initialized { .. });
+        #[cfg(target_arch = "wasm32")]
+        let renderer_ready = true;
         if self.window_state.request_paint && renderer_ready {
             self.window_state.request_paint = false;
             self.paint();
